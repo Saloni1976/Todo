@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Planner</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-heading"><span class="heading-mark">✳</span><span>My planner</span></div>
+      <p class="nav-label">MENU</p>
+      <nav class="navigation">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">⌂</span>Dashboard</button>
+        <button class="nav-item" data-view="tasks"><span class="nav-icon">☷</span>All tasks</button>
+        <button class="nav-item" data-view="calendar"><span class="nav-icon">▦</span>Calendar</button>
+      </nav>
+      <div class="sidebar-note"><span class="note-icon">✿</span><p>A little progress<br>each day adds up.</p></div>
+      <div class="sidebar-footer">Your space, your pace.</div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><p class="date-line" id="eyebrow">YOUR PERSONAL SPACE</p><h1 id="pageTitle">Dashboard</h1></div>
+        <button class="primary-button" id="topAddButton">＋ Add a task</button>
+      </header>
+
+      <section class="view active" id="dashboardView">
+        <div class="welcome-section">
+          <div><p class="welcome-small">A fresh start, whenever you need one.</p><h2>Make room for what matters.</h2><p class="muted-text">Keep track of your tasks, one thing at a time.</p></div>
+          <button class="text-button" id="welcomeAddButton">＋ Add a task</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span class="stat-label">All tasks</span><span class="stat-icon neutral-icon">☷</span></div><p class="stat-number" id="totalStat">0</p><p class="stat-caption">Tasks in your list</p></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-label">Completed</span><span class="stat-icon green-icon">✓</span></div><p class="stat-number" id="completedStat">0</p><p class="stat-caption">Things you've finished</p></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-label">Active</span><span class="stat-icon blue-icon">↗</span></div><p class="stat-number" id="activeStat">0</p><p class="stat-caption">Tasks you're working on</p></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-label">Overdue</span><span class="stat-icon orange-icon">◷</span></div><p class="stat-number" id="overdueStat">0</p><p class="stat-caption">Past their due date</p></article>
+        </div>
+
+        <section class="panel progress-panel">
+          <div class="panel-heading"><div><p class="section-kicker">YOUR PROGRESS</p><h3>A little at a time</h3></div><span class="progress-label" id="progressPercent">0% complete</span></div>
+          <div class="progress-track"><div class="progress-fill" id="progressRing"></div></div>
+          <div class="progress-legend">
+            <span><i class="legend-dot completed-dot"></i>Completed <b id="legendCompleted">0</b></span>
+            <span><i class="legend-dot active-dot"></i>Active <b id="legendActive">0</b></span>
+            <span><i class="legend-dot inactive-dot"></i>Inactive <b id="legendInactive">0</b></span>
+          </div>
+        </section>
+
+        <div class="dashboard-columns">
+          <section class="panel"><div class="panel-heading"><div><p class="section-kicker">YOUR DAY</p><h3>Today's tasks</h3></div><button class="subtle-button" data-go-view="tasks">View all</button></div><div id="todayList" class="compact-list"><p class="empty-state">Loading tasks...</p></div></section>
+          <section class="panel"><div class="panel-heading"><div><p class="section-kicker">COMING UP</p><h3>Upcoming tasks</h3></div><button class="subtle-button" data-go-view="calendar">View calendar</button></div><div id="upcomingList" class="compact-list"><p class="empty-state">Loading tasks...</p></div></section>
+        </div>
+      </section>
+
+      <section class="view" id="tasksView">
+        <div class="page-intro"><h2>Your task list</h2><p>Everything you need to do, all in one place.</p></div>
+        <section class="panel task-list-panel">
+          <div class="filter-bar">
+            <div class="search-box"><span>⌕</span><input type="search" id="searchInput" placeholder="Search your tasks..." aria-label="Search tasks"></div>
+            <select id="statusFilter" aria-label="Filter by status"><option value="all">All statuses</option><option value="active">Active</option><option value="inactive">Inactive</option><option value="completed">Completed</option><option value="pending">Not completed</option></select>
+            <select id="priorityFilter" aria-label="Filter by priority"><option value="all">All priorities</option><option value="High">High priority</option><option value="Medium">Medium priority</option><option value="Low">Low priority</option></select>
+          </div>
+          <div id="allTasksList" class="task-table"><p class="empty-state">Loading tasks...</p></div>
+        </section>
+      </section>
+
+      <section class="view" id="calendarView">
+        <div class="page-intro calendar-intro"><div><h2>Your calendar</h2><p>See what's planned and choose a date to view its tasks.</p></div><button class="secondary-button" id="addDateTask">＋ Add task</button></div>
+        <div class="calendar-layout">
+          <section class="panel calendar-panel">
+            <div class="calendar-toolbar"><button class="calendar-nav" id="prevMonth" aria-label="Previous month">‹</button><h3 id="monthLabel">Month Year</h3><button class="calendar-nav" id="nextMonth" aria-label="Next month">›</button></div>
+            <div class="calendar-grid calendar-weekdays"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </section>
+          <section class="panel selected-date-panel"><div class="selected-date-header"><p class="section-kicker">YOUR SCHEDULE</p><h3 id="selectedDateTitle">Tasks for this date</h3></div><label class="date-picker-label" for="datePicker">Choose a date</label><input type="date" id="datePicker"><div id="dateTasksList" class="date-tasks-list"><p class="empty-state">Choose a date to see your tasks.</p></div></section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="taskModal">
+    <section class="task-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-heading"><div><p class="section-kicker">MAKE A PLAN</p><h2 id="modalTitle">Add a task</h2></div><button class="modal-close" id="closeModal" type="button" aria-label="Close">×</button></div>
+      <form id="taskForm">
+        <div class="form-group"><label for="taskTitle">Task name <span class="required">*</span></label><input id="taskTitle" name="title" type="text" placeholder="What do you need to do?" required maxlength="200"></div>
+        <div class="form-group"><label for="taskDescription">Notes <span class="optional">(optional)</span></label><textarea id="taskDescription" name="description" rows="3" placeholder="Add a few details..." maxlength="1000"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label for="taskDueDate">Due date</label><input id="taskDueDate" name="dueDate" type="date"></div>
+          <div class="form-group"><label for="taskPriority">Priority</label><select id="taskPriority" name="priority"><option value="Low">Low</option><option value="Medium" selected>Medium</option><option value="High">High</option></select></div>
+        </div>
+        <div class="form-options"><label class="check-option"><input type="checkbox" id="taskCompleted" name="completed"><span>Mark as completed</span></label><label class="check-option"><input type="checkbox" id="taskActive" name="isActive" checked><span>Keep task active</span></label></div>
+        <p class="form-message" id="formMessage" role="status"></p>
+        <div class="modal-actions"><button class="secondary-button" id="cancelModal" type="button">Cancel</button><button class="primary-button" id="saveTaskButton" type="submit">Save task</button></div>
+      </form>
+    </section>
+  </div>
+</body>
+</html>
